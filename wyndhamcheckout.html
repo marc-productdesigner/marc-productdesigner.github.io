@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redesigning the Club Wyndham Checkout — Marc Laurente</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <script src="nav.js"></script>
+
+  <div class="case-study">
+    <div class="case-hero">
+      <p class="project-tag">Wyndham Destinations · UX Designer · November 2019 – March 2020</p>
+      <h1>Redesigning the checkout funnel.</h1>
+      <p>Club Wyndham's checkout funnel looked outdated and boring. Most importantly, it was not responsive — causing the mobile experience to be unusable. The transaction summary was cluttered and contained too much information.</p>
+    </div>
+
+    <img class="case-cover"
+      src="images/wyndham/Club+Wyndham+Cover+photo.webp"
+      alt="Club Wyndham checkout redesign" />
+
+    <div class="case-body">
+      <div class="case-content">
+
+        <h2>Problem</h2>
+        <p>Club Wyndham's checkout funnel looked outdated and boring. Most importantly, it was not responsive, causing the mobile experience to be unusable. The transaction summary was cluttered and contained too much information.</p>
+
+        <h2>Solution</h2>
+        <p>Redesign the checkout funnel and make it responsive, aesthetically pleasing, and functional.</p>
+
+        <h2>Summary of what I did</h2>
+
+        <div class="accordion">
+          <details>
+            <summary>Discovery + Research</summary>
+            <ul>
+              <li>Competitive analysis</li>
+              <li>Online studies research</li>
+              <li>Analyzing user feedback from customer service team</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Design</summary>
+            <ul>
+              <li>High fidelity mocks</li>
+              <li>InVision prototypes</li>
+              <li>Delivered mocks for mobile, desktop, and tablet</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Collaboration</summary>
+            <p>Collaborated with:</p>
+            <ul>
+              <li>Paul, Product Manager</li>
+              <li>Kristin, Project Manager</li>
+              <li>Anuk, Lead Engineer</li>
+              <li>Wyndham Destinations product design team</li>
+              <li>Beth, QA</li>
+              <li>Engineers</li>
+              <li>Research team</li>
+              <li>Brian, Data Analyst</li>
+            </ul>
+          </details>
+          <details>
+            <summary>QA</summary>
+            <ul>
+              <li>Responsible for visual QA</li>
+              <li>Assisted in QA</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Accessibility</summary>
+            <ul>
+              <li>Collaborated with Beth in validating and passing accessibility</li>
+            </ul>
+          </details>
+        </div>
+
+        <h2>Before the Redesign</h2>
+        <p>The existing checkout had several usability problems: unclear information hierarchy, inconsistent UI patterns, and a visual design that hadn't kept up with modern expectations for booking flows.</p>
+
+        <img src="images/wyndham/Previous+Checkout+Funnel+1.webp" alt="Before redesign - screen 1" />
+        <img src="images/wyndham/Previous+Checkout+Funnel+2.webp" alt="Before redesign - screen 2" />
+        <img src="images/wyndham/Previous+Checkout+Funnel+3.webp" alt="Before redesign - screen 3" />
+        <img src="images/wyndham/Previous+Checkout+Funnel+4.webp" alt="Before redesign - screen 4" />
+        <img src="images/wyndham/Previous+Checkout+Funnel+5.webp" alt="Before redesign - screen 5" />
+
+        <h2>Research</h2>
+
+        <div class="research-carousel">
+          <button class="carousel-btn carousel-btn--prev" aria-label="Previous">&#8592;</button>
+          <div class="carousel-track-wrap">
+            <div class="carousel-track">
+              <div class="carousel-slide">
+                <img src="images/wyndham/1+Research+-+Number+of+Steps@2x.webp" alt="Research - Number of Steps" />
+              </div>
+              <div class="carousel-slide">
+                <img src="images/wyndham/2+Research+-+Checkout+abandonment@2x.webp" alt="Research - Checkout Abandonment" />
+              </div>
+              <div class="carousel-slide">
+                <img src="images/wyndham/3+Research+-+Form+Fields@2x.webp" alt="Research - Form Fields" />
+              </div>
+              <div class="carousel-slide">
+                <img src="images/wyndham/4+Research+-+Mobile+Checkout-1@2x.webp" alt="Research - Mobile Checkout 1" />
+              </div>
+              <div class="carousel-slide">
+                <img src="images/wyndham/5+Research+-+Mobile+Checkout-2@2x.webp" alt="Research - Mobile Checkout 2" />
+              </div>
+              <div class="carousel-slide">
+                <img src="images/wyndham/6+Research+-+Mobile+Checkout-3@2x.webp" alt="Research - Mobile Checkout 3" />
+              </div>
+              <div class="carousel-slide">
+                <img src="images/wyndham/Research+-+Apple-1@2x.webp" alt="Research - Apple Checkout Reference" />
+              </div>
+            </div>
+          </div>
+          <button class="carousel-btn carousel-btn--next" aria-label="Next">&#8594;</button>
+        </div>
+
+        <h2>Competitive Analysis</h2>
+        <p>I analyzed checkout flows across 10 major booking and travel platforms to benchmark Club Wyndham against industry leaders and identify patterns worth adopting.</p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:24px 0;">
+          <div style="background:#f4f4f0;border-radius:8px;padding:16px;text-align:center;font-size:13px;font-weight:500;">Agoda</div>
+          <div style="background:#f4f4f0;border-radius:8px;padding:16px;text-align:center;font-size:13px;font-weight:500;">Airbnb</div>
+          <div style="background:#f4f4f0;border-radius:8px;padding:16px;text-align:center;font-size:13px;font-weight:500;">Apple</div>
+          <div style="background:#f4f4f0;border-radius:8px;padding:16px;text-align:center;font-size:13px;font-weight:500;">Booking.com</div>
+          <div style="background:#f4f4f0;border-radius:8px;padding:16px;text-align:center;font-size:13px;font-weight:500;">Google Shopping</div>
+          <div style="background:#f4f4f0;border-radius:8px;padding:16px;text-align:center;font-size:13px;font-weight:500;">Groupon</div>
+          <div style="background:#f4f4f0;border-radius:8px;padding:16px;text-align:center;font-size:13px;font-weight:500;">Hotels.com</div>
+          <div style="background:#f4f4f0;border-radius:8px;padding:16px;text-align:center;font-size:13px;font-weight:500;">Hotwire</div>
+          <div style="background:#f4f4f0;border-radius:8px;padding:16px;text-align:center;font-size:13px;font-weight:500;">Orbitz</div>
+          <div style="background:#f4f4f0;border-radius:8px;padding:16px;text-align:center;font-size:13px;font-weight:500;">Southwest</div>
+        </div>
+
+        <img src="images/wyndham/_Research+-+Comparison+Table@2x.webp" alt="Competitive analysis comparison table" />
+
+        <h2>Key Discoveries</h2>
+        <ul>
+          <li>Rate of checkout abandonment in mobile is high compared to desktop.</li>
+          <li>The average number of pages in a checkout flow is 4.</li>
+          <li>The 2 most common reasons for checkout abandonment are unexpected costs and long, complicated checkout process.</li>
+        </ul>
+
+        <h2>Solution</h2>
+        <p>The redesigned checkout brought a clean, modern visual language, clearer information hierarchy, and a streamlined multi-step flow that reduced cognitive load and guided users confidently through to booking completion.</p>
+
+        <img src="images/wyndham/Club+Wyndham+Checkout+-+Responsive+Screens.webp" alt="Redesigned checkout - Responsive Screens" />
+        <p style="font-size:12px;color:var(--gray);margin-top:-16px;margin-bottom:24px;text-transform:uppercase;letter-spacing:0.06em;">Responsive Web: All Screens</p>
+
+        <img src="images/wyndham/Solution+Pay.webp" alt="Redesigned checkout - Payment screen" />
+        <p style="font-size:12px;color:var(--gray);margin-top:-16px;margin-bottom:24px;text-transform:uppercase;letter-spacing:0.06em;">Payment</p>
+
+        <img src="images/wyndham/Solution+Services.webp" alt="Redesigned checkout - Services screen" />
+        <p style="font-size:12px;color:var(--gray);margin-top:-16px;margin-bottom:24px;text-transform:uppercase;letter-spacing:0.06em;">Services</p>
+
+        <img src="images/wyndham/Solution+Transaction+Summary.webp" alt="Redesigned checkout - Transaction Summary" />
+        <p style="font-size:12px;color:var(--gray);margin-top:-16px;margin-bottom:24px;text-transform:uppercase;letter-spacing:0.06em;">Transaction Summary</p>
+
+        <img src="images/wyndham/Solutions+Confirm.webp" alt="Redesigned checkout - Confirm screen" />
+        <p style="font-size:12px;color:var(--gray);margin-top:-16px;margin-bottom:24px;text-transform:uppercase;letter-spacing:0.06em;">Confirmation</p>
+
+        <img src="images/wyndham/Solutions+Thank+you+page.webp" alt="Redesigned checkout - Thank you page" />
+        <p style="font-size:12px;color:var(--gray);margin-top:-16px;margin-bottom:24px;text-transform:uppercase;letter-spacing:0.06em;">Thank You Page</p>
+
+        <img src="images/wyndham/Solutions+Mobile.webp" alt="Redesigned checkout - Mobile" />
+        <p style="font-size:12px;color:var(--gray);margin-top:-16px;margin-bottom:24px;text-transform:uppercase;letter-spacing:0.06em;">Responsive Web: Mobile</p>
+
+        <img src="images/wyndham/Mobile+Screens.webp" alt="Redesigned checkout - Mobile screens detail" />
+        <p style="font-size:12px;color:var(--gray);margin-top:-16px;margin-bottom:24px;text-transform:uppercase;letter-spacing:0.06em;">Mobile Screens Detail</p>
+
+        <h2>Results</h2>
+        <div style="background:#f4f4f0;border-radius:12px;padding:40px;margin:32px 0;text-align:center;">
+          <p style="font-size:clamp(3rem,8vw,5rem);font-family:'DM Serif Display',serif;font-weight:400;line-height:1;margin:0 0 8px;">24%</p>
+          <p style="font-size:1.1rem;color:var(--gray);margin:0;">increase in e-commerce conversion rate</p>
+        </div>
+        <ul>
+          <li>Mobile users increased.</li>
+          <li>With the redesign, there was a <strong>24% increase in e-commerce conversion rate</strong>. This is a metric that is calculated by transactions over visitors to site.</li>
+        </ul>
+
+      </div>
+
+      <aside>
+        <dl class="case-sidebar">
+          <dt>Company</dt>
+          <dd>Wyndham Destinations</dd>
+          <dt>Role</dt>
+          <dd>UX Designer</dd>
+          <dt>Timeline</dt>
+          <dd>November 2019 – March 2020</dd>
+          <dt>Platform</dt>
+          <dd>Responsive Web</dd>
+          <dt>Tools</dt>
+          <dd>Sketch</dd>
+          <dd>InVision</dd>
+          <dd>Zeplin</dd>
+          <dt>Result</dt>
+          <dd>+24% e-commerce conversion rate</dd>
+        </dl>
+      </aside>
+    </div>
+
+    <div class="case-nav">
+      <a href="p2p.html">← Cars.com P2P</a>
+      <a href="index.html">All Work</a>
+      <a href="bmchat.html">BM Chat →</a>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-name">Marc Laurente</span>
+    <span class="footer-meta">Senior Product Designer · New Jersey · © 2026</span>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/marclaurente" target="_blank">LinkedIn</a>
+      <a href="mailto:sayhello@marclaurente.com">Email</a>
+    </div>
+  </footer>
+  <script src="lightbox.js"></script>
+  <script src="carousel.js"></script>
+</body>
+</html>
