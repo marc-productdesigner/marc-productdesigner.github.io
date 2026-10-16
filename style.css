@@ -198,6 +198,8 @@ nav {
   text-decoration: none;
   color: var(--black);
   transition: opacity 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .project-row:last-child { border-bottom: 1px solid var(--light-gray); }
