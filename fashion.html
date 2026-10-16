@@ -3,8 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fashion Photography — Marc Laurente</title>
+  <title>Photography — Marc Laurente</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Photography tab switcher ── */
+    .photo-page { max-width: var(--max-width); margin: 0 auto; padding: 60px 40px 80px; }
+
+    .photo-hero { margin-bottom: 48px; }
+    .photo-hero h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 32px; }
+
+    .photo-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--light-gray);
+      margin-bottom: 48px;
+    }
+    .photo-tab {
+      position: relative;
+      padding: 12px 28px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--gray);
+      cursor: pointer;
+      border: none;
+      background: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .photo-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--black);
+      transform: scaleX(0);
+      transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+    }
+    .photo-tab:hover { color: var(--black); }
+    .photo-tab.active { color: var(--black); }
+    .photo-tab.active::after { transform: scaleX(1); }
+
+    .photo-panel { display: none; }
+    .photo-panel.active { display: block; }
+
+    .photo-panel-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 24px;
+    }
+
+    .photo-grid {
+      columns: 3;
+      column-gap: 12px;
+    }
+    .photo-grid img {
+      width: 100%;
+      display: block;
+      margin-bottom: 12px;
+      border-radius: 4px;
+      cursor: zoom-in;
+      transition: opacity 0.2s;
+    }
+    .photo-grid img:hover { opacity: 0.88; }
+
+    @media (max-width: 900px) {
+      .photo-page { padding: 40px 24px 60px; }
+      .photo-grid { columns: 2; }
+      .photo-tab { padding: 10px 16px; font-size: 0.875rem; }
+    }
+    @media (max-width: 560px) {
+      .photo-grid { columns: 1; }
+    }
+  </style>
 </head>
 <body>
   <script src="nav.js"></script>
@@ -12,52 +88,95 @@
   <div class="photo-page">
     <div class="photo-hero">
       <h1>Photography</h1>
-      <nav class="photo-subnav">
-        <a href="fashion.html" class="active">Fashion</a>
-        <a href="engagement.html">Engagement</a>
-        <a href="kids-newborn.html">Kids &amp; Newborn</a>
-      </nav>
+
+      <div class="photo-tabs" role="tablist">
+        <button class="photo-tab active" role="tab" data-panel="fashion">Fashion</button>
+        <button class="photo-tab" role="tab" data-panel="engagement">Engagement</button>
+        <button class="photo-tab" role="tab" data-panel="kids">Kids &amp; Newborn</button>
+      </div>
     </div>
 
-    <div class="photo-grid">
-      <img src="images/fashion/1-image-asset.jpg" alt="Fashion 1" />
-      <img src="images/fashion/2-SS+Women_10+©marclaurente.jpg" alt="Fashion 2" />
-      <img src="images/fashion/3-SS+Women_1+©marclaurente.jpg" alt="Fashion 3" />
-      <img src="images/fashion/4-BlueDress.jpg" alt="Fashion 4" />
-      <img src="images/fashion/5-VanessaMatsunaga_2©marclaurente.jpg" alt="Fashion 5" />
-      <img src="images/fashion/6-SS+Women_4+©marclaurente.jpg" alt="Fashion 6" />
-      <img src="images/fashion/7-Daniella-1.jpg" alt="Fashion 7" />
-      <img src="images/fashion/8-VanessaMatsunaga_3©marclaurente.jpg" alt="Fashion 8" />
-      <img src="images/fashion/9-SS+Women_6+©marclaurente.jpg" alt="Fashion 9" />
-      <img src="images/fashion/10-SS+Women_7+©marclaurente.jpg" alt="Fashion 10" />
-      <img src="images/fashion/11-SS+Women_9+©marclaurente.jpg" alt="Fashion 11" />
-      <img src="images/fashion/12-SS+Women_3+©marclaurente.jpg" alt="Fashion 12" />
-      <img src="images/fashion/13-HQ.jpg" alt="Fashion 13" />
-      <img src="images/fashion/14-DJMF-1.jpg" alt="Fashion 14" />
-      <img src="images/fashion/15-SS+Women_8+©marclaurente.jpg" alt="Fashion 15" />
-      <img src="images/fashion/16-SS+Women_12+©marclaurente.jpg" alt="Fashion 16" />
-      <img src="images/fashion/17-SS+Women_2+©marclaurente.jpg" alt="Fashion 17" />
-      <img src="images/fashion/18-SS+Women_5+©marclaurente.jpg" alt="Fashion 18" />
-      <img src="images/fashion/19-SS+Women_11+©marclaurente.jpg" alt="Fashion 19" />
-      <img src="images/fashion/20-Vanessa-1.jpg" alt="Fashion 20" />
-      <img src="images/fashion/21-JTaylor5-MarcLaurente.jpg" alt="Fashion 21" />
-      <img src="images/fashion/22-DJMF-2.jpg" alt="Fashion 22" />
-      <img src="images/fashion/23-Smoke.jpg" alt="Fashion 23" />
-      <img src="images/fashion/24-SS+Intimates_3+©marclaurente.jpg" alt="Fashion 24" />
-      <img src="images/fashion/25-JTaylor2-MarcLaurente.jpg" alt="Fashion 25" />
-      <img src="images/fashion/26-SS+Intimates_6+©marclaurente.jpg" alt="Fashion 26" />
-      <img src="images/fashion/27-JTaylor4-MarcLaurente.jpg" alt="Fashion 27" />
-      <img src="images/fashion/28-SS+Intimates_5+©marclaurente.jpg" alt="Fashion 28" />
-      <img src="images/fashion/29-JTaylor3-MarcLaurente.jpg" alt="Fashion 29" />
-      <img src="images/fashion/30-Diane1-MarcLaurente.jpg" alt="Fashion 30" />
-      <img src="images/fashion/31-JTaylor1-MarcLaurente.jpg" alt="Fashion 31" />
-      <img src="images/fashion/32-SS+Intimates_7+©marclaurente.jpg" alt="Fashion 32" />
-      <img src="images/fashion/33-LJ.jpg" alt="Fashion 33" />
-      <img src="images/fashion/34-SS+Intimates_4+©marclaurente.jpg" alt="Fashion 34" />
+    <!-- Fashion -->
+    <div class="photo-panel active" id="panel-fashion">
+      <div class="photo-grid">
+        <img src="images/fashion/1-image-asset.jpg" alt="Fashion" />
+        <img src="images/fashion/2-SS+Women_10+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/3-SS+Women_1+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/4-BlueDress.jpg" alt="Fashion" />
+        <img src="images/fashion/5-VanessaMatsunaga_2©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/6-SS+Women_4+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/7-Daniella-1.jpg" alt="Fashion" />
+        <img src="images/fashion/8-VanessaMatsunaga_3©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/9-SS+Women_6+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/10-SS+Women_7+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/11-SS+Women_9+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/12-SS+Women_3+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/13-HQ.jpg" alt="Fashion" />
+        <img src="images/fashion/14-DJMF-1.jpg" alt="Fashion" />
+        <img src="images/fashion/15-SS+Women_8+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/16-SS+Women_12+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/17-SS+Women_2+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/18-SS+Women_5+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/19-SS+Women_11+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/20-Vanessa-1.jpg" alt="Fashion" />
+        <img src="images/fashion/21-JTaylor5-MarcLaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/22-DJMF-2.jpg" alt="Fashion" />
+        <img src="images/fashion/23-Smoke.jpg" alt="Fashion" />
+        <img src="images/fashion/24-SS+Intimates_3+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/25-JTaylor2-MarcLaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/26-SS+Intimates_6+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/27-JTaylor4-MarcLaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/28-SS+Intimates_5+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/29-JTaylor3-MarcLaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/30-Diane1-MarcLaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/31-JTaylor1-MarcLaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/32-SS+Intimates_7+©marclaurente.jpg" alt="Fashion" />
+        <img src="images/fashion/33-LJ.jpg" alt="Fashion" />
+        <img src="images/fashion/34-SS+Intimates_4+©marclaurente.jpg" alt="Fashion" />
+      </div>
     </div>
+
+    <!-- Engagement -->
+    <div class="photo-panel" id="panel-engagement">
+      <div class="photo-grid">
+        <img src="images/engagement/1-SS+Couples_2+©marclaurente.jpg" alt="Engagement" />
+        <img src="images/engagement/2-SS+Couples_8+©marclaurente.jpg" alt="Engagement" />
+        <img src="images/engagement/3-Couple.jpg" alt="Engagement" />
+        <img src="images/engagement/4-SS+Couples_1+©marclaurente.jpg" alt="Engagement" />
+        <img src="images/engagement/5-SS+Couples_4+©marclaurente.jpg" alt="Engagement" />
+        <img src="images/engagement/6-SS+Couples_3+©marclaurente.jpg" alt="Engagement" />
+        <img src="images/engagement/7-couple.jpg" alt="Engagement" />
+        <img src="images/engagement/8-SS+Couples_9+©marclaurente.jpg" alt="Engagement" />
+        <img src="images/engagement/9-couple.jpg" alt="Engagement" />
+        <img src="images/engagement/10-couple.jpg" alt="Engagement" />
+        <img src="images/engagement/11-couple.jpg" alt="Engagement" />
+        <img src="images/engagement/12-couple.jpg" alt="Engagement" />
+      </div>
+    </div>
+
+    <!-- Kids & Newborn -->
+    <div class="photo-panel" id="panel-kids">
+      <div class="photo-grid">
+        <img src="images/kids/1-Kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/2-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/3-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/4-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/5-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/6-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/7-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/8-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/9-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/10-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/11-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/12-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/13-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/14-kid.jpg" alt="Kids &amp; Newborn" />
+        <img src="images/kids/15-kid.jpg" alt="Kids &amp; Newborn" />
+      </div>
+    </div>
+
   </div>
 
-  <script src="lightbox.js"></script>
   <footer>
     <span class="footer-name">Marc Laurente</span>
     <span class="footer-meta">Senior Product Designer · New Jersey · © 2026</span>
@@ -66,5 +185,30 @@
       <a href="mailto:sayhello@marclaurente.com">Email</a>
     </div>
   </footer>
+
+  <script>
+    function activateTab(panel) {
+      document.querySelectorAll('.photo-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.photo-panel').forEach(p => p.classList.remove('active'));
+      var tab = document.querySelector('[data-panel="' + panel + '"]');
+      if (tab) {
+        tab.classList.add('active');
+        document.getElementById('panel-' + panel).classList.add('active');
+      }
+    }
+
+    document.querySelectorAll('.photo-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        activateTab(tab.dataset.panel);
+        history.replaceState(null, '', '#' + tab.dataset.panel);
+      });
+    });
+
+    // Handle hash on page load (from redirects)
+    var hash = window.location.hash.replace('#', '');
+    if (hash === 'engagement' || hash === 'kids') {
+      activateTab(hash);
+    }
+  </script>
 </body>
 </html>
