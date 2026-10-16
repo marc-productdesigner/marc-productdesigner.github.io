@@ -695,26 +695,27 @@ nav {
 }
 
 .logo-card {
-  background: #f4f4f0;
+  background: #ffffff;
   border-radius: 12px;
   aspect-ratio: 4 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 24px;
   cursor: pointer;
   overflow: hidden;
   transition: background 0.25s, transform 0.25s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
 .logo-card:hover {
-  background: #e8e8e4;
+  background: #f8f8f8;
   transform: scale(1.015);
 }
 
 .logo-card img {
-  max-width: 65%;
-  max-height: 65%;
+  max-width: 90%;
+  max-height: 90%;
   width: auto;
   height: auto;
   object-fit: contain;
