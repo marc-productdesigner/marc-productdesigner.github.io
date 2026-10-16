@@ -24,7 +24,7 @@
         </div>
         <div class="project-row-info">
           <h3>Creating the private listing creation flow</h3>
-          <p>A product feature that enables private-party sellers to create car listings on <a class="project-link-inline" href="https://www.cars.com" target="_blank" rel="noopener" onclick="event.stopPropagation()">Cars.com</a> — a leading digital marketplace and solutions provider for the automotive industry that connects car shoppers with sellers.</p>
+          <p>A product feature that enables private-party sellers to create car listings on <span class="project-link-inline company-link" data-href="https://www.cars.com">Cars.com</span> — a leading digital marketplace and solutions provider for the automotive industry that connects car shoppers with sellers.</p>
           <span class="view-project">View Project</span>
         </div>
       </a>
@@ -35,7 +35,7 @@
         </div>
         <div class="project-row-info">
           <h3>Redesigning the checkout funnel</h3>
-          <p>I was tasked to create a responsive, aesthetically pleasing, and functional checkout funnel that would result in a better experience for the Club Wyndham members — one of <a class="project-link-inline" href="https://www.wyndhamdestinations.com" target="_blank" rel="noopener" onclick="event.stopPropagation()">Wyndham Destinations'</a> premier brands in its portfolio.</p>
+          <p>I was tasked to create a responsive, aesthetically pleasing, and functional checkout funnel that would result in a better experience for the Club Wyndham members — one of <span class="project-link-inline company-link" data-href="https://www.wyndhamdestinations.com">Wyndham Destinations'</span> premier brands in its portfolio.</p>
           <span class="view-project">View Project</span>
         </div>
       </a>
@@ -46,7 +46,7 @@
         </div>
         <div class="project-row-info">
           <h3>Improving the customer chat experience</h3>
-          <p>I was tasked to fix the issues of the customer chat experience of <a class="project-link-inline" href="https://www.benjaminmoore.com" target="_blank" rel="noopener" onclick="event.stopPropagation()">Benjamin Moore</a> — an American manufacturer of premium and commercial paints, stains, and other architectural coatings.</p>
+          <p>I was tasked to fix the issues of the customer chat experience of <span class="project-link-inline company-link" data-href="https://www.benjaminmoore.com">Benjamin Moore</span> — an American manufacturer of premium and commercial paints, stains, and other architectural coatings.</p>
           <span class="view-project">View Project</span>
         </div>
       </a>
@@ -84,5 +84,15 @@
       sayhello@marclaurente.com
     </div>
   </footer>
+  <script>
+    document.querySelectorAll('.company-link').forEach(function(el) {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.open(el.getAttribute('data-href'), '_blank');
+      });
+    });
+  </script>
 </body>
 </html>
