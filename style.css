@@ -190,7 +190,7 @@ nav {
 
 .project-row {
   display: grid;
-  grid-template-columns: 480px 1fr;
+  grid-template-columns: 45% 1fr;
   gap: 48px;
   align-items: center;
   padding: 48px 0;
