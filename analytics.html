@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics — Marc Laurente</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f5f7; --surface: #ffffff; --surface2: #f9fafb;
+      --border: #e5e7eb; --fg: #111827; --fg2: #6b7280; --fg3: #9ca3af;
+      --accent: #2563eb; --accent-light: #eff6ff; --green: #16a34a;
+    }
+    html, body { height: 100%; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; background: var(--bg); color: var(--fg); }
+
+    /* Lock screen */
+    #lockScreen { display: flex; align-items: center; justify-content: center; height: 100%; }
+    .lock-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 40px 36px; width: 340px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+    .lock-icon { width: 44px; height: 44px; background: var(--accent); border-radius: 11px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+    .lock-icon svg { width: 20px; height: 20px; fill: white; }
+    .lock-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .lock-sub { font-size: 13px; color: var(--fg3); margin-bottom: 24px; }
+    .lock-input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif; color: var(--fg); background: var(--surface); outline: none; margin-bottom: 10px; transition: border-color 0.15s; }
+    .lock-input:focus { border-color: var(--accent); }
+    .lock-input.error { border-color: #dc2626; }
+    .lock-btn { width: 100%; padding: 10px; background: var(--accent); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: opacity 0.15s; }
+    .lock-btn:hover { opacity: 0.9; }
+    .lock-error { font-size: 12px; color: #dc2626; margin-top: 8px; display: none; }
+
+    /* Dashboard */
+    #dashboard { display: none; height: 100%; flex-direction: column; }
+    .header { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .header-logo { width: 28px; height: 28px; background: var(--accent); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+    .header-logo svg { width: 16px; height: 16px; fill: white; }
+    .header-title { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; }
+    .header-subtitle { font-size: 12px; color: var(--fg3); }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .live-dot { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--fg2); }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); color: var(--fg); font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; white-space: nowrap; }
+    .btn:hover { background: var(--surface2); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
+    .btn.primary:hover { opacity: 0.9; }
+    .btn svg { width: 14px; height: 14px; }
+    .btn.spinning svg { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 16px 24px 0; flex-shrink: 0; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .stat-label { font-size: 11px; font-weight: 500; color: var(--fg3); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+    .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; line-height: 1; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+    .stat-sub { font-size: 11px; color: var(--fg3); }
+
+    .main { flex: 1; overflow: hidden; display: flex; flex-direction: column; padding: 16px 24px; gap: 12px; min-height: 0; }
+    .filter-bar { display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+    .filter-label { font-size: 12px; color: var(--fg3); font-weight: 500; }
+    .filter-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--fg2); font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .15s; }
+    .filter-btn:hover { background: var(--surface2); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+    .table-wrap { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+    .table-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .table-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; }
+    .table-count { font-size: 12px; color: var(--fg3); }
+    .table-scroll { overflow-y: auto; flex: 1; min-height: 0; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { position: sticky; top: 0; background: var(--surface2); padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--fg3); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody td { padding: 11px 14px; font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .page-pill { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-light); color: var(--accent); padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: 500; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+    .scroll-bar-wrap { display: flex; align-items: center; gap: 6px; }
+    .scroll-bar { width: 60px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+    .scroll-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+    .scroll-pct { font-size: 12px; color: var(--fg2); min-width: 28px; }
+    .time-cell { color: var(--fg2); font-size: 12px; }
+    .empty-state { padding: 60px 20px; text-align: center; color: var(--fg3); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .empty-state svg { width: 36px; height: 36px; opacity: .3; }
+    .empty-title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: var(--fg2); }
+    .empty-sub { font-size: 12px; max-width: 280px; line-height: 1.5; }
+    .last-updated { font-size: 11px; color: var(--fg3); text-align: right; padding-top: 2px; flex-shrink: 0; }
+    .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex-shrink: 0; }
+    .mini-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .mini-title { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 600; color: var(--fg2); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px; }
+    .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+    .bar-label { font-size: 12px; color: var(--fg); min-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width .6s ease; }
+    .bar-count { font-size: 12px; color: var(--fg3); min-width: 20px; text-align: right; font-variant-numeric: tabular-nums; }
+    @media (max-width: 700px) {
+      .stats-row { grid-template-columns: repeat(2,1fr); }
+      .bottom-row { grid-template-columns: 1fr; }
+      .hide-mobile { display: none; }
+      .header, .main, .stats-row { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="lockScreen">
+  <div class="lock-card">
+    <div class="lock-icon">
+      <svg viewBox="0 0 20 20"><path d="M10 2a4 4 0 0 0-4 4v2H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-1V6a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2v2H8V6a2 2 0 0 1 2-2zm0 8a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg>
+    </div>
+    <div class="lock-title">Portfolio Analytics</div>
+    <div class="lock-sub">marclaurente.com · Private</div>
+    <input type="password" id="pwInput" class="lock-input" placeholder="Enter password" autocomplete="current-password" />
+    <button class="lock-btn" onclick="unlock()">View Dashboard</button>
+    <div class="lock-error" id="lockError">Incorrect password</div>
+  </div>
+</div>
+
+<div id="dashboard">
+  <div class="header">
+    <div class="header-left">
+      <div class="header-logo">
+        <svg viewBox="0 0 16 16"><path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1z"/></svg>
+      </div>
+      <div>
+        <div class="header-title">Portfolio Analytics</div>
+        <div class="header-subtitle">marclaurente.com</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="live-dot"><div class="dot"></div><span>Live</span></div>
+      <button class="btn primary" id="refreshBtn" onclick="loadData()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M14 8A6 6 0 1 1 8 2a6 6 0 0 1 4.2 1.7L14 2v4h-4l1.5-1.5"/>
+        </svg>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Total Visits</div><div class="stat-value" id="statTotal">—</div><div class="stat-sub">all time</div></div>
+    <div class="stat-card"><div class="stat-label">Unique Sessions</div><div class="stat-value" id="statUnique">—</div><div class="stat-sub">distinct visitors</div></div>
+    <div class="stat-card"><div class="stat-label">Avg. Time on Page</div><div class="stat-value" id="statAvgTime">—</div><div class="stat-sub">seconds</div></div>
+    <div class="stat-card"><div class="stat-label">Avg. Scroll Depth</div><div class="stat-value" id="statAvgScroll">—</div><div class="stat-sub">percent</div></div>
+  </div>
+
+  <div class="main">
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-btn active" onclick="setFilter('all',this)">All pages</button>
+      <button class="filter-btn" onclick="setFilter('index',this)">Home</button>
+      <button class="filter-btn" onclick="setFilter('about',this)">About</button>
+      <button class="filter-btn" onclick="setFilter('resume',this)">Resume</button>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <span class="table-title">Visitor Log</span>
+        <span class="table-count" id="tableCount">— visits</span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Page</th>
+              <th class="hide-mobile">Location</th>
+              <th class="hide-mobile">Time on Page</th>
+              <th>Scroll</th>
+              <th class="hide-mobile">Referrer</th>
+            </tr>
+          </thead>
+          <tbody id="visitorTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="mini-card"><div class="mini-title">Top Pages</div><div id="topPages"></div></div>
+      <div class="mini-card"><div class="mini-title">Top Locations</div><div id="topLocations"></div></div>
+    </div>
+
+    <div class="last-updated" id="lastUpdated"></div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://xzprnvdfvzvwuumqythy.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_LdH4UHznTdm6dcs8g6UcTw_Lm1MR23j';
+  const PASSWORD = 'demo';
+  let allData = [], currentFilter = 'all';
+
+  if (sessionStorage.getItem('analytics_auth') === '1') showDashboard();
+
+  document.getElementById('pwInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') unlock();
+  });
+
+  function unlock() {
+    const val = document.getElementById('pwInput').value;
+    if (val === PASSWORD) {
+      sessionStorage.setItem('analytics_auth', '1');
+      showDashboard();
+    } else {
+      document.getElementById('pwInput').classList.add('error');
+      document.getElementById('lockError').style.display = 'block';
+      document.getElementById('pwInput').value = '';
+    }
+  }
+
+  function showDashboard() {
+    document.getElementById('lockScreen').style.display = 'none';
+    const dash = document.getElementById('dashboard');
+    dash.style.display = 'flex';
+    loadData();
+  }
+
+  function setFilter(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTable(allData);
+  }
+
+  function formatTime(ts) {
+    const d = new Date(ts), now = new Date(), diff = now - d;
+    if (diff < 60000) return 'just now';
+    if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
+    if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
+    return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' ' +
+           d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  }
+
+  function formatDuration(secs) {
+    if (!secs) return '—';
+    if (secs < 60) return secs + 's';
+    return Math.floor(secs/60) + 'm ' + (secs%60) + 's';
+  }
+
+  function shortenPage(page) {
+    if (!page) return '/';
+    try { return new URL(page).pathname || '/'; }
+    catch { return page.length > 35 ? page.slice(0,35)+'…' : page; }
+  }
+
+  function shortenReferrer(ref) {
+    if (!ref || ref === 'direct') return '<span style="color:var(--fg3)">Direct</span>';
+    try { return new URL(ref).hostname.replace('www.',''); }
+    catch { return ref.slice(0,20); }
+  }
+
+  function getFiltered(data) {
+    if (currentFilter === 'all') return data;
+    return data.filter(r => {
+      const p = shortenPage(r.page);
+      return p.includes(currentFilter);
+    });
+  }
+
+  function renderTable(data) {
+    const filtered = getFiltered(data);
+    document.getElementById('tableCount').textContent = filtered.length + ' visit' + (filtered.length !== 1 ? 's' : '');
+    const tbody = document.getElementById('visitorTable');
+    if (!filtered.length) {
+      tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="empty-title">No visits yet</div><div class="empty-sub">Visit your site and come back — hits will appear here within seconds.</div></div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = filtered.map(r => {
+      const page = shortenPage(r.page);
+      const scroll = r.scroll_depth != null ? r.scroll_depth : null;
+      const loc = [r.city, r.country].filter(Boolean).join(', ') || '—';
+      return '<tr>' +
+        '<td class="time-cell">' + formatTime(r.created_at) + '</td>' +
+        '<td><span class="page-pill">' + page + '</span></td>' +
+        '<td class="hide-mobile" style="color:var(--fg2)">' + loc + '</td>' +
+        '<td class="hide-mobile time-cell">' + formatDuration(r.time_on_page) + '</td>' +
+        '<td>' + (scroll != null ? '<div class="scroll-bar-wrap"><div class="scroll-bar"><div class="scroll-fill" style="width:' + scroll + '%"></div></div><span class="scroll-pct">' + scroll + '%</span></div>' : '<span style="color:var(--fg3)">—</span>') + '</td>' +
+        '<td class="hide-mobile time-cell">' + shortenReferrer(r.referrer) + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  function renderTopPages(data) {
+    const counts = {};
+    data.forEach(r => { const p = shortenPage(r.page); counts[p] = (counts[p]||0)+1; });
+    const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    const max = sorted[0] ? sorted[0][1] : 1;
+    const el = document.getElementById('topPages');
+    if (!sorted.length) { el.innerHTML='<div style="color:var(--fg3);font-size:12px">No data yet</div>'; return; }
+    el.innerHTML = sorted.map(function(item) {
+      return '<div class="bar-row"><span class="bar-label">' + item[0] + '</span><div class="bar-track"><div class="bar-fill" style="width:' + (item[1]/max*100) + '%"></div></div><span class="bar-count">' + item[1] + '</span></div>';
+    }).join('');
+  }
+
+  function renderTopLocations(data) {
+    const counts = {};
+    data.forEach(r => { const l = r.country || 'Unknown'; counts[l] = (counts[l]||0)+1; });
+    const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    const max = sorted[0] ? sorted[0][1] : 1;
+    const el = document.getElementById('topLocations');
+    if (!sorted.length) { el.innerHTML='<div style="color:var(--fg3);font-size:12px">No data yet</div>'; return; }
+    el.innerHTML = sorted.map(function(item) {
+      return '<div class="bar-row"><span class="bar-label">' + item[0] + '</span><div class="bar-track"><div class="bar-fill" style="width:' + (item[1]/max*100) + '%"></div></div><span class="bar-count">' + item[1] + '</span></div>';
+    }).join('');
+  }
+
+  function updateStats(data) {
+    document.getElementById('statTotal').textContent = data.length;
+    const sessions = new Set(data.map(r=>r.session_id).filter(Boolean));
+    document.getElementById('statUnique').textContent = sessions.size || data.length;
+    const times = data.map(r=>r.time_on_page).filter(n=>n>0);
+    document.getElementById('statAvgTime').textContent = times.length ? Math.round(times.reduce((a,b)=>a+b,0)/times.length) + 's' : '—';
+    const scrolls = data.map(r=>r.scroll_depth).filter(n=>n!=null);
+    document.getElementById('statAvgScroll').textContent = scrolls.length ? Math.round(scrolls.reduce((a,b)=>a+b,0)/scrolls.length) + '%' : '—';
+  }
+
+  async function loadData() {
+    const btn = document.getElementById('refreshBtn');
+    btn.classList.add('spinning'); btn.disabled = true;
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/page_views?select=*&order=created_at.desc&limit=500', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      allData = await res.json();
+      updateStats(allData);
+      renderTable(allData);
+      renderTopPages(allData);
+      renderTopLocations(allData);
+      document.getElementById('lastUpdated').textContent = 'Last updated ' + new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'});
+    } catch(e) {
+      document.getElementById('visitorTable').innerHTML = '<tr><td colspan="6"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div class="empty-title">Could not connect</div><div class="empty-sub">' + e.message + '</div></div></td></tr>';
+    } finally {
+      btn.classList.remove('spinning'); btn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>
