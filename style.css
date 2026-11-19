@@ -655,9 +655,18 @@ nav {
 
 .resume-contact-row {
   display: flex;
-  gap: 28px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
   flex-wrap: wrap;
   font-size: 0.9rem;
+}
+
+.resume-contact-links {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .resume-contact-row a {
@@ -1228,16 +1237,27 @@ footer {
   padding: 12px 24px;
   border-radius: 6px;
   text-decoration: none;
-  margin-top: 40px;
-  margin-bottom: 8px;
   transition: opacity 0.2s;
   letter-spacing: 0.01em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .resume-download-btn:hover { opacity: 0.75; }
 
 .resume-download-btn svg {
   flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .resume-contact-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .resume-contact-links {
+    justify-content: center;
+  }
 }
 
 /* ===== RESEARCH CAROUSEL ===== */
