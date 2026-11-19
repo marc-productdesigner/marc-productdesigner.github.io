@@ -5,6 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About — Marc Laurente</title>
   <link rel="stylesheet" href="style.css" />
+  <script>
+(function() {
+  var SUPABASE_URL = "https://xzprnvdfvzvwuumqythy.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_LdH4UHznTdm6dcs8g6UcTw_Lm1MR23j";
+  var sessionId = sessionStorage.getItem("_sid") || (function() {
+    var id = Math.random().toString(36).slice(2);
+    sessionStorage.setItem("_sid", id);
+    return id;
+  })();
+  var startTime = Date.now();
+  var maxScroll = 0;
+  window.addEventListener("scroll", function() {
+    var pct = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+    if (pct > maxScroll) maxScroll = Math.min(pct, 100);
+  });
+  function getLocation(cb) {
+    fetch("https://ipapi.co/json/")
+      .then(function(r) { return r.json(); })
+      .then(function(d) { cb({ city: d.city, country: d.country_name }); })
+      .catch(function() { cb({}); });
+  }
+  function sendVisit() {
+    getLocation(function(loc) {
+      var payload = JSON.stringify({
+        page: location.href,
+        referrer: document.referrer || "direct",
+        session_id: sessionId,
+        scroll_depth: maxScroll,
+        time_on_page: Math.round((Date.now() - startTime) / 1000),
+        city: loc.city || null,
+        country: loc.country || null,
+        user_agent: navigator.userAgent
+      });
+      var blob = new Blob([payload], { type: "application/json" });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(SUPABASE_URL + "/rest/v1/page_views?apikey=" + SUPABASE_KEY, blob);
+      } else {
+        fetch(SUPABASE_URL + "/rest/v1/page_views", {
+          method: "POST", keepalive: true,
+          headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY,
+                     "Content-Type": "application/json", "Prefer": "return=minimal" },
+          body: payload
+        });
+      }
+    });
+  }
+  window.addEventListener("beforeunload", sendVisit);
+  document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === "hidden") sendVisit();
+  });
+})();
+  </script>
 </head>
 <body>
   <script src="nav.js"></script>
