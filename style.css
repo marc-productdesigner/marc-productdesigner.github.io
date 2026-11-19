@@ -669,13 +669,15 @@ nav {
   align-items: center;
 }
 
-.resume-contact-row a {
+.resume-contact-row a:not(.resume-download-btn) {
   text-decoration: underline;
   text-underline-offset: 2px;
   color: var(--black);
 }
 
-.resume-contact-row a:hover { opacity: 0.6; }
+.resume-contact-row a:not(.resume-download-btn):hover { opacity: 0.6; }
+.resume-contact-row a.resume-download-btn { color: #fff; }
+.resume-contact-row a.resume-download-btn:hover { opacity: 0.75; }
 
 /* ===== LOGOS PAGE ===== */
 .logos-section {
