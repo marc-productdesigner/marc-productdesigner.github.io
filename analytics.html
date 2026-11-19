@@ -150,6 +150,15 @@
       <button class="filter-btn" onclick="setFilter('index',this)">Home</button>
       <button class="filter-btn" onclick="setFilter('about',this)">About</button>
       <button class="filter-btn" onclick="setFilter('resume',this)">Resume</button>
+      <button class="filter-btn" onclick="setFilter('p2p',this)">P2P</button>
+      <button class="filter-btn" onclick="setFilter('sellindex',this)">Sell Index</button>
+      <button class="filter-btn" onclick="setFilter('bmchat',this)">BM Chat</button>
+      <button class="filter-btn" onclick="setFilter('whatchapp',this)">WhatchApp</button>
+      <button class="filter-btn" onclick="setFilter('wyndham',this)">Wyndham</button>
+      <button class="filter-btn" onclick="setFilter('logos',this)">Logos</button>
+      <button class="filter-btn" onclick="setFilter('fashion',this)">Fashion</button>
+      <button class="filter-btn" onclick="setFilter('videography',this)">Videography</button>
+      <button class="filter-btn" style="border-color:#16a34a;color:#16a34a" onclick="setFilter('cta_download',this)">📥 Downloads</button>
     </div>
 
     <div class="table-wrap">
@@ -243,6 +252,7 @@
   }
 
   function shortenReferrer(ref) {
+    if (ref === 'cta_download') return '<span style="color:#16a34a;font-weight:600">📥 Downloaded</span>';
     if (!ref || ref === 'direct') return '<span style="color:var(--fg3)">Direct</span>';
     try { return new URL(ref).hostname.replace('www.',''); }
     catch { return ref.slice(0,20); }
@@ -250,6 +260,7 @@
 
   function getFiltered(data) {
     if (currentFilter === 'all') return data;
+    if (currentFilter === 'cta_download') return data.filter(r => r.referrer === 'cta_download');
     return data.filter(r => {
       const p = shortenPage(r.page);
       return p.includes(currentFilter);
