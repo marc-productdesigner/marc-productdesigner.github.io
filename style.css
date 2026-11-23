@@ -1464,18 +1464,18 @@ html.dark-init {
 }
 
 .hero-greeting {
-  animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: heroFadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: 0.1s;
 }
 
 .hero-h1 {
-  animation: heroFadeUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: 0.3s;
+  animation: heroFadeUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.35s;
 }
 
 .hero-learn-more {
-  animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: 0.55s;
+  animation: heroFadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.65s;
 }
 
 /* Respect reduced motion */
