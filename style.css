@@ -1326,3 +1326,127 @@ footer {
   .carousel-btn--prev { margin-right: 8px; }
   .carousel-btn--next { margin-left: 8px; }
 }
+
+/* ===== DARK MODE ===== */
+body.dark {
+  --black: #f0f0ee;
+  --gray: #9a9a98;
+  --light-gray: #2e2e2c;
+  --bg: #141413;
+  --white: #1e1e1c;
+  --accent: #2e2e2c;
+}
+
+/* Nav background */
+body.dark nav {
+  background: rgba(20,20,19,0.95);
+  border-bottom-color: rgba(255,255,255,0.06);
+}
+
+/* Logo invert to white */
+body.dark .nav-logo-img {
+  filter: invert(1) brightness(2);
+}
+
+/* Mobile menu */
+body.dark .mobile-menu {
+  background: #141413;
+}
+
+/* Logo cards */
+body.dark .logo-card {
+  background: #1e1e1c;
+}
+body.dark .logo-card:hover {
+  background: #2a2a28;
+}
+
+/* Logo images — keep them visible but subtle inversion for white logos */
+body.dark .logo-card img {
+  filter: invert(0);
+}
+
+/* Case sidebar */
+body.dark .case-sidebar {
+  background: #1e1e1c;
+  border-color: #2e2e2c;
+}
+
+/* Resume download button — invert on dark */
+body.dark .resume-download-btn {
+  background: #f0f0ee;
+  color: #141413;
+}
+
+/* Photo subnav */
+body.dark .photo-subnav {
+  background: rgba(20,20,19,0.95);
+  border-bottom-color: rgba(255,255,255,0.06);
+}
+
+/* Dark mode toggle button styles */
+.dark-toggle {
+  background: none;
+  border: 1px solid var(--light-gray);
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  color: var(--black);
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+  margin-left: 16px;
+  flex-shrink: 0;
+}
+
+.dark-toggle:hover {
+  background: var(--light-gray);
+}
+
+.dark-toggle svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Mobile dark toggle inside mobile menu */
+.mobile-dark-toggle {
+  background: none;
+  border: 1px solid var(--light-gray);
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  color: var(--black);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.mobile-dark-toggle:hover {
+  background: var(--light-gray);
+}
+
+.mobile-dark-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Smooth dark mode transitions */
+body, nav, .mobile-menu, .logo-card, .case-sidebar, .resume-download-btn, .photo-subnav {
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* Anti-FOUC: apply dark vars immediately on html before body class set by nav.js */
+html.dark-init {
+  background: #141413;
+  color: #f0f0ee;
+}
