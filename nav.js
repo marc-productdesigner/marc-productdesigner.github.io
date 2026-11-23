@@ -76,4 +76,17 @@
     if (mobileLabel) mobileLabel.textContent = isDark ? 'Light mode' : 'Dark mode';
   };
 
+  // Border trace animation — fires once per browser session on first page load
+  if (!sessionStorage.getItem('toggleSeen')) {
+    sessionStorage.setItem('toggleSeen', '1');
+    setTimeout(function() {
+      const btn = document.getElementById('darkToggle');
+      if (btn) {
+        btn.classList.add('show-trace');
+        setTimeout(function() { btn.classList.remove('show-trace'); }, 2400);
+      }
+    }, 800);
+  }
+
 })();
+// (patch applied below — border trace on first session visit)
