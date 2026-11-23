@@ -159,10 +159,65 @@ nav {
 }
 
 .hero h1 .highlight {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
   font-weight: 700;
+  text-decoration: none;
+  display: inline;
+  background-image: linear-gradient(90deg, currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 2px;
+  padding-bottom: 2px;
+  animation: highlightSweep 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-play-state: paused;
+}
+
+/* Each word gets its own gradient color + stagger */
+.hero h1 .highlight:nth-child(1) {
+  background-image: linear-gradient(90deg, #4f8ef7, #6aaeff);
+  animation-delay: 1.6s;
+  animation-play-state: running;
+}
+.hero h1 .highlight:nth-child(2) {
+  background-image: linear-gradient(90deg, #3b7de8, #5fa3ff);
+  animation-delay: 1.85s;
+  animation-play-state: running;
+}
+.hero h1 .highlight:nth-child(3) {
+  background-image: linear-gradient(90deg, #5b9bff, #82bcff);
+  animation-delay: 2.1s;
+  animation-play-state: running;
+}
+.hero h1 .highlight:nth-child(4) {
+  background-image: linear-gradient(90deg, #2f72e0, #4f8ef7);
+  animation-delay: 2.35s;
+  animation-play-state: running;
+}
+
+@keyframes highlightSweep {
+  from { background-size: 0% 2px; }
+  to   { background-size: 100% 2px; }
+}
+
+/* Dark mode — slightly brighter blues */
+body.dark .hero h1 .highlight:nth-child(1) {
+  background-image: linear-gradient(90deg, #6aaeff, #99c8ff);
+}
+body.dark .hero h1 .highlight:nth-child(2) {
+  background-image: linear-gradient(90deg, #5fa3ff, #8ec4ff);
+}
+body.dark .hero h1 .highlight:nth-child(3) {
+  background-image: linear-gradient(90deg, #82bcff, #aad4ff);
+}
+body.dark .hero h1 .highlight:nth-child(4) {
+  background-image: linear-gradient(90deg, #4f8ef7, #7eb3ff);
+}
+
+/* Reduced motion — just show underline statically */
+@media (prefers-reduced-motion: reduce) {
+  .hero h1 .highlight {
+    background-size: 100% 2px !important;
+    animation: none !important;
+  }
 }
 
 .hero-learn-more {
