@@ -60,6 +60,9 @@
     .filter-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--fg2); font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .15s; }
     .filter-btn:hover { background: var(--surface2); }
     .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .toggle-me-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid #f59e0b; background: var(--surface); color: #f59e0b; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .15s; }
+    .toggle-me-btn.active { background: #f59e0b; border-color: #f59e0b; color: white; }
+    .toggle-me-btn:hover { opacity: 0.85; }
 
     .table-wrap { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
     .table-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
@@ -159,6 +162,7 @@
       <button class="filter-btn" onclick="setFilter('fashion',this)">Fashion</button>
       <button class="filter-btn" onclick="setFilter('videography',this)">Videography</button>
       <button class="filter-btn" style="border-color:#16a34a;color:#16a34a" onclick="setFilter('cta_download',this)">📥 Downloads</button>
+      <button class="toggle-me-btn active" id="hideMeBtn" onclick="toggleMe()" title="Rahway, NJ = you">🙈 Hide Me</button>
     </div>
 
     <div class="table-wrap">
@@ -196,7 +200,7 @@
   const SUPABASE_URL = 'https://xzprnvdfvzvwuumqythy.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_LdH4UHznTdm6dcs8g6UcTw_Lm1MR23j';
   const PASSWORD = 'demo';
-  let allData = [], currentFilter = 'all';
+  let allData = [], currentFilter = 'all', hideMe = true;
 
   if (sessionStorage.getItem('analytics_auth') === '1') showDashboard();
 
@@ -259,12 +263,24 @@
   }
 
   function getFiltered(data) {
-    if (currentFilter === 'all') return data;
-    if (currentFilter === 'cta_download') return data.filter(r => r.referrer === 'cta_download');
-    return data.filter(r => {
+    let d = hideMe ? data.filter(r => !(r.city && r.city.toLowerCase().includes('rahway'))) : data;
+    if (currentFilter === 'all') return d;
+    if (currentFilter === 'cta_download') return d.filter(r => r.referrer === 'cta_download');
+    return d.filter(r => {
       const p = shortenPage(r.page);
       return p.includes(currentFilter);
     });
+  }
+
+  function toggleMe() {
+    hideMe = !hideMe;
+    const btn = document.getElementById('hideMeBtn');
+    btn.textContent = hideMe ? '🙈 Hide Me' : '👁 Show Me';
+    btn.classList.toggle('active', hideMe);
+    renderTable(allData);
+    updateStats(getFiltered(allData));
+    renderTopPages(getFiltered(allData));
+    renderTopLocations(getFiltered(allData));
   }
 
   function renderTable(data) {
@@ -333,10 +349,11 @@
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       allData = await res.json();
-      updateStats(allData);
+      const filtered = getFiltered(allData);
+      updateStats(filtered);
       renderTable(allData);
-      renderTopPages(allData);
-      renderTopLocations(allData);
+      renderTopPages(filtered);
+      renderTopLocations(filtered);
       document.getElementById('lastUpdated').textContent = 'Last updated ' + new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'});
     } catch(e) {
       document.getElementById('visitorTable').innerHTML = '<tr><td colspan="6"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div class="empty-title">Could not connect</div><div class="empty-sub">' + e.message + '</div></div></td></tr>';
