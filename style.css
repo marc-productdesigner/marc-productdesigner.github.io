@@ -259,7 +259,7 @@ body.dark .hero h1 .highlight:nth-child(4) {
 
 .project-row:last-child { border-bottom: 1px solid var(--light-gray); }
 
-.project-row:hover { opacity: 1; }
+.project-row:hover { opacity: 0.85; }
 
 .project-row-image {
   border-radius: 8px;
@@ -303,25 +303,9 @@ body.dark .hero h1 .highlight:nth-child(4) {
   display: inline-block;
   font-size: 0.875rem;
   font-weight: 500;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
   color: var(--black);
-  border: 1.5px solid transparent;
-  border-radius: 100px;
-  padding: 6px 16px;
-  margin-left: -16px;
-  transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
-}
-
-.project-row:hover .view-project {
-  background: #4f8ef7;
-  color: #fff;
-  border-color: #4f8ef7;
-}
-
-body.dark .project-row:hover .view-project {
-  background: #4f8ef7;
-  color: #fff;
-  border-color: #4f8ef7;
 }
 
 /* ===== CASE STUDY ===== */
