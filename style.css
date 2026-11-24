@@ -1467,6 +1467,15 @@ body.dark .photo-subnav {
   width: 14px;
   height: 14px;
   flex-shrink: 0;
+  display: block;
+  vertical-align: middle;
+}
+
+#darkToggleIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
 /* Mobile dark toggle inside mobile menu */
@@ -1662,12 +1671,12 @@ body.dark .dark-toggle::before {
 }
 
 .view-project--coming-soon {
+  display: inline-block;
   text-decoration: none;
   background: rgba(79, 142, 247, 0.1);
   color: #4f8ef7;
   border-radius: 100px;
   padding: 5px 14px;
-  margin-left: -14px;
   font-size: 0.8rem;
   letter-spacing: 0.03em;
 }
@@ -1685,10 +1694,4 @@ body.dark .view-project--coming-soon {
 }
 body.dark .project-row--coming-soon .project-row-image img {
   background: #1c1c1e;
-}
-
-/* Coming Soon pill: align left with body text */
-.view-project--coming-soon {
-  display: inline-block;
-  margin-left: 0;
 }
