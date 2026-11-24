@@ -1650,3 +1650,29 @@ body.dark .dark-toggle::before {
 @media (prefers-reduced-motion: reduce) {
   .project-row-image img { animation: none; }
 }
+
+/* ===== COMING SOON PROJECT ROW ===== */
+.project-row--coming-soon {
+  cursor: default;
+  opacity: 0.75;
+}
+
+.project-row--coming-soon:hover {
+  opacity: 0.75;
+}
+
+.view-project--coming-soon {
+  text-decoration: none;
+  background: rgba(79, 142, 247, 0.1);
+  color: #4f8ef7;
+  border-radius: 100px;
+  padding: 5px 14px;
+  margin-left: -14px;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+}
+
+body.dark .view-project--coming-soon {
+  background: rgba(79, 142, 247, 0.15);
+  color: #6aaeff;
+}
