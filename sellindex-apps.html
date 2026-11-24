@@ -24,8 +24,16 @@
   function getLocation(cb) {
     fetch("https://ipapi.co/json/")
       .then(function(r) { return r.json(); })
-      .then(function(d) { cb({ city: d.city, country: d.country_name }); })
-      .catch(function() { cb({}); });
+      .then(function(d) {
+        if (d.city) { cb({ city: d.city, country: d.country_name }); return; }
+        throw new Error("empty");
+      })
+      .catch(function() {
+        fetch("http://ip-api.com/json/?fields=city,country")
+          .then(function(r) { return r.json(); })
+          .then(function(d) { cb({ city: d.city || null, country: d.country || null }); })
+          .catch(function() { cb({}); });
+      });
   }
   function sendVisit() {
     getLocation(function(loc) {
