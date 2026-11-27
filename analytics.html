@@ -60,9 +60,14 @@
     .filter-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--fg2); font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .15s; }
     .filter-btn:hover { background: var(--surface2); }
     .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
-    .toggle-me-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid #f59e0b; background: var(--surface); color: #f59e0b; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .15s; }
-    .toggle-me-btn.active { background: #f59e0b; border-color: #f59e0b; color: white; }
-    .toggle-me-btn:hover { opacity: 0.85; }
+    .toggle-me-wrap { display: flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; padding: 4px 0; }
+    .toggle-me-label { font-size: 12px; font-weight: 500; color: var(--fg2); }
+    .toggle-switch { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-track { position: absolute; inset: 0; border-radius: 20px; background: var(--border); transition: background .2s; }
+    .toggle-switch input:checked + .toggle-track { background: #16a34a; }
+    .toggle-thumb { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: transform .2s; }
+    .toggle-switch input:checked ~ .toggle-thumb { transform: translateX(16px); }
 
     .table-wrap { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
     .table-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
@@ -99,9 +104,6 @@
       .bottom-row { grid-template-columns: 1fr; }
       .hide-mobile { display: none; }
       .header, .main, .stats-row { padding-left: 16px; padding-right: 16px; }
-      .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      table { min-width: 480px; }
-      .table-wrap { overflow: hidden; }
     }
   </style>
 </head>
@@ -165,7 +167,14 @@
       <button class="filter-btn" onclick="setFilter('fashion',this)">Fashion</button>
       <button class="filter-btn" onclick="setFilter('videography',this)">Videography</button>
       <button class="filter-btn" style="border-color:#16a34a;color:#16a34a" onclick="setFilter('cta_download',this)">📥 Downloads</button>
-      <button class="toggle-me-btn active" id="hideMeBtn" onclick="toggleMe()" title="Rahway, NJ = you">🙈 Hide Me</button>
+      <label class="toggle-me-wrap" title="Toggle to hide your own visits from the log">
+        <div class="toggle-switch">
+          <input type="checkbox" id="hideMeCheck" checked onchange="toggleMe()" />
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </div>
+        <span class="toggle-me-label" id="hideMeLabel">Hiding my visits</span>
+      </label>
     </div>
 
     <div class="table-wrap">
@@ -239,10 +248,11 @@
 
   function formatTime(ts) {
     const d = new Date(ts), now = new Date();
-    const timeStr = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true}).toLowerCase();
-    const isToday = d.toDateString() === now.toDateString();
+    const tz = 'America/New_York';
+    const timeStr = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:tz}).toLowerCase();
+    const isToday = d.toLocaleDateString('en-US',{timeZone:tz}) === now.toLocaleDateString('en-US',{timeZone:tz});
     if (isToday) return timeStr;
-    return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' ' + timeStr;
+    return d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:tz}) + ' ' + timeStr;
   }
 
   function formatDuration(secs) {
@@ -275,10 +285,8 @@
   }
 
   function toggleMe() {
-    hideMe = !hideMe;
-    const btn = document.getElementById('hideMeBtn');
-    btn.textContent = hideMe ? '🙈 Hide Me' : '👁 Show Me';
-    btn.classList.toggle('active', hideMe);
+    hideMe = document.getElementById('hideMeCheck').checked;
+    document.getElementById('hideMeLabel').textContent = hideMe ? 'Hiding my visits' : 'Showing my visits';
     renderTable(allData);
     updateStats(getFiltered(allData));
     renderTopPages(getFiltered(allData));
