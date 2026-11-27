@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bank Reconciliation 2.0 — Marc Laurente</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>if(localStorage.getItem("darkMode")==="1")document.documentElement.classList.add("dark-init");</script>
+  <script>
+(function() {
+  var SUPABASE_URL = "https://xzprnvdfvzvwuumqythy.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_LdH4UHznTdm6dcs8g6UcTw_Lm1MR23j";
+  var sessionId = sessionStorage.getItem("_sid") || (function() {
+    var id = Math.random().toString(36).slice(2);
+    sessionStorage.setItem("_sid", id);
+    return id;
+  })();
+  var startTime = Date.now();
+  var maxScroll = 0;
+  window.addEventListener("scroll", function() {
+    var pct = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+    if (pct > maxScroll) maxScroll = Math.min(pct, 100);
+  });
+  function getLocation(cb) {
+    fetch("https://ipapi.co/json/")
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.city) { cb({ city: d.city, country: d.country_name }); return; }
+        throw new Error("empty");
+      })
+      .catch(function() {
+        fetch("http://ip-api.com/json/?fields=city,country")
+          .then(function(r) { return r.json(); })
+          .then(function(d) { cb({ city: d.city || null, country: d.country || null }); })
+          .catch(function() { cb({}); });
+      });
+  }
+  function sendVisit() {
+    getLocation(function(loc) {
+      var payload = JSON.stringify({
+        page: location.href,
+        referrer: document.referrer || "direct",
+        session_id: sessionId,
+        scroll_depth: maxScroll,
+        time_on_page: Math.round((Date.now() - startTime) / 1000),
+        city: loc.city || null,
+        country: loc.country || null,
+        user_agent: navigator.userAgent
+      });
+      fetch(SUPABASE_URL + "/rest/v1/page_views", {
+        method: "POST", keepalive: true,
+        headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY,
+                   "Content-Type": "application/json", "Prefer": "return=minimal" },
+        body: payload
+      });
+    });
+  }
+  window.addEventListener("beforeunload", sendVisit);
+  document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === "hidden") sendVisit();
+  });
+})();
+  </script>
+  <style>
+    .confidentiality-banner {
+      background: var(--surface, #f5f5f5);
+      border: 1px solid var(--border, #e0e0e0);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 40px;
+      font-size: 13px;
+      color: var(--gray, #888);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+    .confidentiality-banner svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+      opacity: 0.6;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0 32px;
+    }
+    @media (max-width: 600px) { .feature-grid { grid-template-columns: 1fr; } }
+    .feature-card {
+      background: var(--surface, #f8f8f8);
+      border: 1px solid var(--border, #e8e8e8);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+    .feature-card h4 { font-size: 13px; font-weight: 600; margin: 0 0 5px; color: var(--black, #111); }
+    .feature-card p { font-size: 13px; color: var(--gray, #777); margin: 0; line-height: 1.55; }
+    .workflow-steps { margin: 16px 0 32px; display: flex; flex-direction: column; gap: 10px; }
+    .workflow-step { display: flex; gap: 12px; align-items: flex-start; }
+    .workflow-step-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--black, #111); color: #fff;
+      font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .workflow-step p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--fg, #222); }
+    .match-statuses { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 32px; }
+    .match-status {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 13px 15px; border-radius: 8px;
+      border: 1px solid var(--border, #e8e8e8);
+    }
+    .match-pill {
+      font-size: 11px; font-weight: 700;
+      padding: 3px 9px; border-radius: 20px;
+      flex-shrink: 0; white-space: nowrap; margin-top: 1px;
+    }
+    .match-pill.matched { background: #dcfce7; color: #15803d; }
+    .match-pill.review  { background: #fef9c3; color: #a16207; }
+    .match-pill.nomatch { background: #fee2e2; color: #b91c1c; }
+    .match-status p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--gray, #666); }
+    .dark .match-pill.matched { background: #14532d; color: #86efac; }
+    .dark .match-pill.review  { background: #422006; color: #fde047; }
+    .dark .match-pill.nomatch { background: #450a0a; color: #fca5a5; }
+    .case-img { border-radius: 6px; border: 1px solid var(--border); width: 100%; }
+    .case-img-caption { font-size: 12px; color: var(--gray); margin-top: -16px; margin-bottom: 32px; text-transform: uppercase; letter-spacing: 0.06em; }
+  </style>
+</head>
+<body>
+  <script src="nav.js"></script>
+
+  <div class="case-study">
+    <div class="case-hero">
+      <p class="project-tag">RentVine · Product Designer · 2025 – 2026</p>
+      <h1>Redesigning bank reconciliation from the ground up.</h1>
+      <p>Bank reconciliation is one of the most critical — and most dreaded — tasks in property management accounting. The old flow required property managers to manually check off every transaction without any guidance, context, or intelligence. We set out to change that.</p>
+    </div>
+
+    <img class="case-cover"
+      src="https://downloads.intercomcdn.com/i/o/by0xaf7v/946433/1c35a60c935ef1084fb387ab7631/a680ddc8e7c773d5ab4ad7ed48282711.png"
+      alt="Bank Reconciliation 2.0 — RentVine" />
+
+    <div class="case-body">
+      <div class="case-content">
+
+        <div class="confidentiality-banner">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          This project contains proprietary work. The details shared here are limited to what's publicly available. I'm happy to walk you through the full process in a conversation.
+        </div>
+
+        <h2>Problem</h2>
+        <p>The original reconciliation tool asked property managers to check off transactions manually against a bank statement, with no assistance from the system. The layout split "Money In" and "Money Out" into two disconnected tables, buried the most important balance indicators in a sidebar, and offered no indication of which transactions actually matched or why.</p>
+        <p><strong>The result:</strong> monthly close took significantly longer than it should, errors were common, and users lacked confidence that their reconciliation was accurate when they hit "Reconcile."</p>
+
+        <h2>Before</h2>
+        <p>The old screen required users to manually scan two separate transaction tables and check off items one by one. There was no matching logic, no confidence indicator, and no clear prioritization of what to review first.</p>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/946434/091daa8f9f558ad9794bfa1eafeb/8267c5d098211c90eab6ab5e08b437e0.png"
+          alt="Old reconciliation screen — two-table layout with manual checkboxes" />
+        <p class="case-img-caption">Old reconciliation screen</p>
+
+        <h2>Solution</h2>
+        <p>Reconciliation 2.0 is a ground-up redesign of how property managers close their books. It introduces intelligent transaction matching, three distinct workflows to fit different team needs, and a new interface architecture that surfaces the most important information upfront.</p>
+        <p><a href="https://help.rentvine.com/en/articles/16793902-reconciliation-2-0" target="_blank" class="project-link">View product documentation →</a></p>
+
+        <h2>Summary of what I did</h2>
+
+        <div class="accordion">
+          <details>
+            <summary>Discovery + Research</summary>
+            <ul>
+              <li>Identified pain points in the existing reconciliation flow through support ticket review</li>
+              <li>Studied bank reconciliation workflows across property management software</li>
+              <li>Defined three distinct user workflow patterns: statement upload, live bank sync, and manual</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Design</summary>
+            <ul>
+              <li>Redesigned the full reconciliation surface from scratch</li>
+              <li>Designed the Triple-Tie Banner — the core UX anchor of the new interface</li>
+              <li>Designed the Match Confidence Tracker and Match Drawer patterns</li>
+              <li>Created high-fidelity mockups and Figma prototypes</li>
+              <li>Defined the visual language for match statuses (Matched, Needs Review, No Match)</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Collaboration</summary>
+            <p>Collaborated with:</p>
+            <ul>
+              <li>Engineering on matching algorithm integration</li>
+              <li>Product on workflow prioritization</li>
+              <li>Support on common user failure patterns</li>
+              <li>Plaid integration team for Bank Sync flow</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Documentation + Handoff</summary>
+            <ul>
+              <li>Authored the help center documentation for the feature</li>
+              <li>Defined error states and edge cases for all three workflows</li>
+              <li>Provided annotated specs for match logic UI states</li>
+            </ul>
+          </details>
+        </div>
+
+        <h2>New Interface Architecture</h2>
+        <p>The biggest structural change was replacing the two disconnected tables (Money In / Money Out) with a unified transaction view, anchored by three key balance indicators at the top of every screen.</p>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/2718952511/9eac3354c5b1b2d8df3c2a311aa6/Reconciliation-20Setup-20UI-png-1.png"
+          alt="Reconciliation 2.0 setup screen — workflow selection" />
+        <p class="case-img-caption">Reconciliation setup — workflow selection</p>
+
+        <h3>The Triple-Tie Banner</h3>
+        <p>Pinned to the top of every reconciliation session, it shows three balances that must all agree before a user can close out the period. When all three match, the account is tied out.</p>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h4>Ending Balance</h4>
+            <p>The statement balance — what the bank says the account holds at period close.</p>
+          </div>
+          <div class="feature-card">
+            <h4>Cleared Balance</h4>
+            <p>The beginning balance plus all checked transactions in the reconciliation.</p>
+          </div>
+          <div class="feature-card">
+            <h4>Adjusted Cash Balance</h4>
+            <p>The RentVine ledger balance adjusted for outstanding items not yet cleared.</p>
+          </div>
+          <div class="feature-card">
+            <h4>How it ties out</h4>
+            <p>When all three numbers match, the user can reconcile. If they don't, the banner surfaces where to start.</p>
+          </div>
+        </div>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/2647417689/6c105ea92e2c5025641486ccc2dc/image-png-Jul-23-2026-04-16-14-1132-PM.png"
+          alt="Triple-Tie Banner showing three balances" />
+        <p class="case-img-caption">Triple-Tie Banner</p>
+
+        <h2>Match Confidence Tracker</h2>
+        <p>Rather than dropping users into a wall of unchecked transactions, the new interface surfaces a confidence score for every line item. The tracker sorts transactions into three buckets and tells users exactly where to focus first.</p>
+
+        <div class="match-statuses">
+          <div class="match-status">
+            <span class="match-pill matched">Matched</span>
+            <p>High confidence. The system already checked these off. Spot-check a sample and move on.</p>
+          </div>
+          <div class="match-status">
+            <span class="match-pill review">Needs Review</span>
+            <p>Multiple possible matches, or a weaker signal. Open the Match Drawer to pick the right one.</p>
+          </div>
+          <div class="match-status">
+            <span class="match-pill nomatch">No Match</span>
+            <p>No ledger entry found. This is where problems live. Start here, every time.</p>
+          </div>
+        </div>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/2647417664/3bfd9239052434dcc616b04893cb/Match-20Confidence-20Tracker-20--20Marc-20Laurente.jpg"
+          alt="Match Confidence Tracker" />
+        <p class="case-img-caption">Match Confidence Tracker</p>
+
+        <h2>Transaction Table</h2>
+        <p>Each row shows its match status at a glance. Users can open the Match Drawer on any row to see the full matching logic, review alternatives, or manually override the system's suggestion.</p>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/2647417667/c24da9c7004ddff9568636aa90ac/Transaction-20Table-20--20Marc-20Laurente.jpg"
+          alt="Transaction Table with match status indicators" />
+        <p class="case-img-caption">Transaction Table</p>
+
+        <h3>The Match Drawer</h3>
+        <p>A panel that opens from any transaction row, showing the full matching context: the confidence logic used, suggested alternatives, and the ability to combine multiple ledger entries against one bank line.</p>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/2647417677/20f13b31629735836ccf7fdd82ba/image-png-Jul-23-2026-04-18-02-4298-PM.png"
+          alt="Match Drawer showing transaction details and matching logic" />
+        <p class="case-img-caption">Match Drawer</p>
+
+        <h2>Three Workflows</h2>
+        <p>One of the key design decisions was supporting three distinct ways teams actually reconcile, rather than forcing everyone through one rigid flow.</p>
+
+        <h3>Match Assist — Monthly statement upload</h3>
+        <p>The team uploads a PDF bank statement, the system analyzes it, and Match Assist runs against the ledger. Best for teams doing monthly close.</p>
+
+        <div class="workflow-steps">
+          <div class="workflow-step">
+            <div class="workflow-step-num">1</div>
+            <p>Select the bank account and confirm Bank Sync is off</p>
+          </div>
+          <div class="workflow-step">
+            <div class="workflow-step-num">2</div>
+            <p>Upload the statement by drag-and-drop or file picker</p>
+          </div>
+          <div class="workflow-step">
+            <div class="workflow-step-num">3</div>
+            <p>Wait for the system to analyze and populate the Match Confidence Tracker</p>
+          </div>
+          <div class="workflow-step">
+            <div class="workflow-step-num">4</div>
+            <p>Review No Match items first, then Needs Review, then spot-check Matched</p>
+          </div>
+          <div class="workflow-step">
+            <div class="workflow-step-num">5</div>
+            <p>Click Reconcile when the Triple-Tie Banner agrees</p>
+          </div>
+        </div>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/2647417683/7a67b7155bc804b4377f0f7c7842/undefined-Jul-23-2026-04-42-31-5605-PM.png"
+          alt="Match Assist workflow — statement upload" />
+        <p class="case-img-caption">Match Assist — statement upload</p>
+
+        <h3>Bank Sync — Live connection via Plaid</h3>
+        <p>For teams that want ongoing transaction visibility, Bank Sync connects directly to the bank through Plaid. Transactions pull in roughly twice a day and are matched as they arrive. RentVine never stores bank login credentials.</p>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/2647417680/bfab9f61c271a733df7b802cf5c7/Screenshot-202026-08-18-20at-209_07_06-20AM.png"
+          alt="Bank Sync — Plaid connection flow" />
+        <p class="case-img-caption">Bank Sync — Plaid connection</p>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/2647417668/00ce8a695f416f48537cffb2da20/Rentvine-20Bank-20Toggle-20--20Marc-20Laurente.jpg"
+          alt="RentVine to Bank toggle — switching between ledger and bank view" />
+        <p class="case-img-caption">RentVine / Bank toggle</p>
+
+        <h3>Manual</h3>
+        <p>No upload, no live connection. Users check off transactions directly against their statement. The Match Confidence Tracker doesn't apply here, but the Triple-Tie Banner still guides completion.</p>
+
+        <h2>How Matching Works</h2>
+        <p><strong>Step 1 — Rules-based:</strong> The system checks amount, date, check number, and transaction type. Deposits within 3 days match automatically. Payments within 5 days match. ACH transactions matching by settlement ID, amount within 5 cents, and date within 5 days match. When conditions are close but not exact, the item goes to Needs Review.</p>
+
+        <p><strong>Step 2 — Intelligent matching:</strong> When rules aren't enough, the system evaluates description similarity and historical transaction patterns to suggest a likely match with a confidence score. Users can always override in the Match Drawer.</p>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/2647417669/06055eb6ccf8078b355a87d4ca44/image-png-Jul-23-2026-05-09-10-7497-PM.png"
+          alt="Matching confidence logic" />
+        <p class="case-img-caption">Matching confidence logic</p>
+
+        <h2>Outcomes</h2>
+        <p><strong>Reconciliation 2.0 shipped to all RentVine accounts in 2026.</strong> The redesign directly addresses the most common failure patterns from the old tool: no match visibility, no prioritization, and no system guidance on where to start.</p>
+
+        <ul>
+          <li>Property managers now have a clear, prioritized review order for every reconciliation session</li>
+          <li>The Triple-Tie Banner eliminates the guesswork of knowing when a reconciliation is actually complete</li>
+          <li>Match Assist and Bank Sync reduce manual transaction checking for teams that previously had no automation</li>
+          <li>Split matching handles complex scenarios that the old tool couldn't address at all</li>
+        </ul>
+
+        <img class="case-img"
+          src="https://downloads.intercomcdn.com/i/o/by0xaf7v/2647417673/6875e916d86836c058854857c19a/Screenshot-202026-08-18-20at-209_09_49-20AM.png"
+          alt="Reconciliation 2.0 — full interface" />
+        <p class="case-img-caption">Reconciliation 2.0 — full interface</p>
+
+      </div>
+
+      <aside>
+        <dl class="case-sidebar">
+          <dt>Company</dt>
+          <dd>RentVine</dd>
+          <dt>Role</dt>
+          <dd>Product Designer</dd>
+          <dt>Timeline</dt>
+          <dd>2025 – 2026</dd>
+          <dt>Platform</dt>
+          <dd>Web App</dd>
+          <dt>Tools</dt>
+          <dd>Figma</dd>
+          <dd>Jira</dd>
+          <dd>Intercom</dd>
+          <dt>Type</dt>
+          <dd>Feature Redesign</dd>
+          <dd>Accounting UX</dd>
+        </dl>
+      </aside>
+    </div>
+
+    <div class="case-nav">
+      <a href="wyndhamcheckout.html">← Wyndham Checkout</a>
+      <a href="index.html">All Work</a>
+      <a href="p2p.html">Cars.com P2P →</a>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-name">Marc Laurente</span>
+    <span class="footer-meta">Senior Product Designer · New Jersey · © 2026</span>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/marclaurente" target="_blank">LinkedIn</a>
+      <a href="mailto:sayhello@marclaurente.com">Email</a>
+    </div>
+  </footer>
+</body>
+</html>
