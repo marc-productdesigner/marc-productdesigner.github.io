@@ -104,6 +104,9 @@
       .bottom-row { grid-template-columns: 1fr; }
       .hide-mobile { display: none; }
       .header, .main, .stats-row { padding-left: 16px; padding-right: 16px; }
+      .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      table { min-width: 480px; }
+      .table-wrap { overflow: hidden; }
     }
   </style>
 </head>
@@ -248,11 +251,10 @@
 
   function formatTime(ts) {
     const d = new Date(ts), now = new Date();
-    const tz = 'America/New_York';
-    const timeStr = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:tz}).toLowerCase();
-    const isToday = d.toLocaleDateString('en-US',{timeZone:tz}) === now.toLocaleDateString('en-US',{timeZone:tz});
+    const timeStr = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true}).toLowerCase();
+    const isToday = d.toDateString() === now.toDateString();
     if (isToday) return timeStr;
-    return d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:tz}) + ' ' + timeStr;
+    return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' ' + timeStr;
   }
 
   function formatDuration(secs) {
