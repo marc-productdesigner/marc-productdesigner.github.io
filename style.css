@@ -1637,29 +1637,6 @@ body.dark .dark-toggle::before {
   );
 }
 
-/* ===== PROJECT IMAGE FLOAT ANIMATION ===== */
-@keyframes projectFloat {
-  0%   { transform: translateY(0px); }
-  50%  { transform: translateY(-6px); }
-  100% { transform: translateY(0px); }
-}
-
-.project-row-image img {
-  animation: projectFloat 5s ease-in-out infinite;
-  will-change: transform;
-}
-
-/* Stagger each project so they don't all move in sync */
-.project-row:nth-child(1) .project-row-image img { animation-delay: 0s; }
-.project-row:nth-child(2) .project-row-image img { animation-delay: 1s; }
-.project-row:nth-child(3) .project-row-image img { animation-delay: 2s; }
-.project-row:nth-child(4) .project-row-image img { animation-delay: 3s; }
-.project-row:nth-child(5) .project-row-image img { animation-delay: 4s; }
-
-@media (prefers-reduced-motion: reduce) {
-  .project-row-image img { animation: none; }
-}
-
 /* ===== COMING SOON PROJECT ROW ===== */
 .project-row--coming-soon {
   cursor: default;
