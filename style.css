@@ -1663,11 +1663,6 @@ body.dark .dark-toggle::before {
 /* ===== COMING SOON PROJECT ROW ===== */
 .project-row--coming-soon {
   cursor: default;
-  opacity: 0.75;
-}
-
-.project-row--coming-soon:hover {
-  opacity: 0.75;
 }
 
 .view-project--coming-soon {
@@ -1684,14 +1679,4 @@ body.dark .dark-toggle::before {
 body.dark .view-project--coming-soon {
   background: rgba(255, 255, 255, 0.08);
   color: #666;
-}
-
-/* Coming-soon cards: show full screenshot without cropping */
-.project-row--coming-soon .project-row-image img {
-  object-fit: contain;
-  object-position: left center;
-  background: #f5f5f7;
-}
-body.dark .project-row--coming-soon .project-row-image img {
-  background: #1c1c1e;
 }
