@@ -1673,8 +1673,8 @@ body.dark .dark-toggle::before {
 .view-project--coming-soon {
   display: inline-block;
   text-decoration: none;
-  background: rgba(79, 142, 247, 0.1);
-  color: #4f8ef7;
+  background: rgba(0, 0, 0, 0.06);
+  color: #999;
   border-radius: 100px;
   padding: 5px 14px;
   font-size: 0.8rem;
@@ -1682,8 +1682,8 @@ body.dark .dark-toggle::before {
 }
 
 body.dark .view-project--coming-soon {
-  background: rgba(79, 142, 247, 0.15);
-  color: #6aaeff;
+  background: rgba(255, 255, 255, 0.08);
+  color: #666;
 }
 
 /* Coming-soon cards: show full screenshot without cropping */
